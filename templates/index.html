@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="../../style/screen.css" type="text/css"/>
+    <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+    <link rel="alternate" type="application/atom+xml"
+      title="Atom Feed" href="{{feedPath}}"/>
+  </head>
+  <body>
+    <div id="nav-header">
+      <a class="nav-selected" href="{{index}}">Home</a>
+      <a href="">Favorites</a>
+      <a href="../../subscriptions.html">Subscriptions</a>
+    </div>
+    <ul id="posts">
+      {{#posts}}
+        <li id="{{link}}" date="{{date}}" class="entry">
+          <h3><a href="{{providerUrl}}">{{providerName}}</a></h3>
+          <h4><a href="{{link}}">{{title}}</a></h4>
+          <div class="body">
+            {{{body}}}
+            {{#enclosure}}
+              <p class="enclosure">
+                <img class="type-icon" src="../../images/audio.png"/>
+                <a href="{{enclosure_link}}">{{enclosure}}</a>
+              </p>
+            {{/enclosure}}
+            <p class="by">
+              by {{author}}, <span class="date">{{date}}</span>
+            </p>
+          </div>
+        </li>
+      {{/posts}}
+    </ul>
+  </body>
+  {{>scripts}}
+</html>
