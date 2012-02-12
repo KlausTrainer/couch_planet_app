@@ -5,7 +5,7 @@ var subscriptions = {
     $("#toolbar button.add").click(page.addField)
     $("#toolbar button.save").click(page.save)
 
-    var xhr = $.get("../../subscriptions.json", function(data, success, xhr) {
+    var xhr = $.get("subscriptions/subscriptions.json", function(data, success, xhr) {
       page.rev = xhr.getResponseHeader("etag")
       topics = JSON.parse(xhr.responseText).topics
       topics.forEach(function(topic) {

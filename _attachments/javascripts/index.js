@@ -57,15 +57,16 @@ $.couch.app(function(app) {
         return false
       }
     })
-    return false
+    return true
   }
 
   $(document).endlessScroll({
-    bottomPixels: 256,
-    fireDelay: 128,
+    bottomPixels: 128,
+    fireOnce: true,
+    fireDelay: 256,
     callback: scrollFun,
     loader: '<img id="loader" src="images/loading.gif"/>',
     insertAfter: "#posts li.entry:last",
     ceaseFire: function() { return ceaseFire }
   })
-})
+}, {db: "couch_planet", design: "couch_planet"})

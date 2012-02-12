@@ -42,11 +42,11 @@
   <script src="vendor/couchapp/jquery.couch.app.util.js"></script>
   <script src="vendor/couchapp/jquery.evently.js"></script>
   <script src="vendor/couchapp/jquery.mustache.js"></script>
-  <script src="script/subscriptions.js"></script>
+  <script src="javascripts/subscriptions.js"></script>
   <script>
     $.couch.app(function(app) {
       $("#account").evently(app.ddoc.evently.account, app)
       subscriptions.init()
-    })
+    }, {db: "couch_planet", design: "couch_planet"})
   </script>
 </html>
