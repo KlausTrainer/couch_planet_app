@@ -1,7 +1,5 @@
 $.couch.app(function(app) {
-  $("#posts").evently(app.ddoc.evently.posts, app, "initialize")
-
-  $(".date").prettyDate()
+  $("#posts").evently(app.ddoc.evently.posts, app)
 
   var ceaseFire = false
 
