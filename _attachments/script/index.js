@@ -1,5 +1,5 @@
 $.couch.app(function(app) {
-  $("#posts").evently(app.ddoc.evently.posts, app)
+  $("#posts").evently(app.ddoc.evently.posts, app, "initialize")
 
   $(".date").prettyDate()
 
@@ -14,33 +14,17 @@ $.couch.app(function(app) {
     if (!this.prev_date)
       this.prev_date = $last_entry.data('date')
 
-    var viewname = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1),
-        descending = $(document).getUrlParam("descending") || "true",
-        start = $(document).getUrlParam("startkey"),
-        end_date = descending == "true" ?  "0000-01-01T00%3A00%3A00.000Z" : "9999-12-31T23%3A59%3A59.999Z"
+    var date = $last_entry.data("date"),
+        startkey = '"' + date + '"',
+        endkey = '"0000-01-01T00%3A00%3A00.000Z"'
 
-    var date = $last_entry.data("date")
-    if (start && viewname == "recent-posts-by-topic") {
-      var topic = JSON.parse(unescape(start))[0]
-      var startkey = '["' + topic + '","' + date + '"]'
-      var endkey = '["' + topic + '","' + end_date + '"]'
-      if (date == this.prev_date) {
-        var docid = $last_entry.attr("id")
-        startkey = startkey + '&startkey_docid=' + '"' + docid + '"'
-      }
-      this.prev_date = date
-    } else {
-      var startkey = '"' + date + '"'
-      var endkey = '"' + end_date + '"'
-      if (date == this.prev_date) {
-        var docid = $last_entry.attr("id")
-        startkey = startkey + '&startkey_docid=' + '"' + docid + '"'
-      }
-      this.prev_date = date
+    if (date === this.prev_date) {
+      var docid = $last_entry.attr("id")
+      startkey = startkey + '&startkey_docid=' + '"' + docid + '"'
     }
+    this.prev_date = date
 
-    var url = "../../_view/" + viewname + "?descending=" + descending +
-              "&limit=5&skip=1&startkey=" + startkey + "&endkey=" + endkey
+    var url = "_view/recent-posts?descending=true&limit=5&skip=1&startkey=" + startkey + "&endkey=" + endkey
     $.ajax({
       url : url,
       dataType: 'json',
@@ -51,7 +35,7 @@ $.couch.app(function(app) {
             var entry = entryObj.value, enclosure = '', newEntry
             if (entry.enclosure) {
               enclosure = '<p class="enclosure"><img class="type-icon"' +
-                          ' src="../../images/audio.png"/> <a href="' +
+                          ' src="images/audio.png"/> <a href="' +
                           entry.enclosure_link + '">' + entry.enclosure +
                           '</a></p>'
             }
@@ -82,7 +66,7 @@ $.couch.app(function(app) {
     bottomPixels: 256,
     fireDelay: 128,
     callback: scrollFun,
-    loader: '<img id="loader" src="../../images/loading.gif"/>',
+    loader: '<img id="loader" src="images/loading.gif"/>',
     insertAfter: "#posts li.entry:last",
     ceaseFire: function() { return ceaseFire }
   })
