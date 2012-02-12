@@ -49,23 +49,24 @@ h3 a:link {
   /* Gradient */
   background-color: #0089E5;
 
-  text-shadow: 0 1px 1px #222; /* FF3.5+, Opera 9+, Saf1+, Chrome, IE10 */
+  text-shadow: 0px 1px 1px #222; /* FF3.5+, Opera 9+, Saf1+, Chrome, IE10 */
+}
+
+h3 a:hover, h3 a:visited, h3 a:visited:hover {
+  color: white;
+  text-shadow: 0px 2px 1px #222; /* FF3.5+, Opera 9+, Saf1+, Chrome, IE10 */
 }
 
 h4 {
   text-align: center;
   font-size: 22px;
 }
-
-h4 a:link {
+h4 a:link, h4 a:visited {
   text-decoration: none;
   color: black;
 }
-h4 a:hover, a:visited:hover {
+h4 a:hover, h4 a:visited:hover {
   color: #0089E5;
-}
-h4 a:visited {
-  color: black;
 }
 
 #nav-header {

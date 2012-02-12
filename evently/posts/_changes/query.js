@@ -1,18 +1,17 @@
 function() {
-  var ret = {}
+  var ret = {},
+      pathname = document.location.pathname,
+      viewname = pathname.substring(pathname.lastIndexOf("/") + 1),
+      descending = $(document).getUrlParam("descending"),
+      skip = $(document).getUrlParam("skip"),
+      limit = $(document).getUrlParam("limit"),
+      startkey = $(document).getUrlParam("startkey"),
+      endkey = $(document).getUrlParam("endkey")
 
-  var pathname = document.location.pathname
-  var viewname = pathname.substring(pathname.lastIndexOf("/") + 1)
   if (viewname == "recent-posts-by-topic")
     ret.view = "recent-posts-by-topic"
   else
     ret.view = "recent-posts"
-
-  var descending = $(document).getUrlParam("descending")
-  var skip = $(document).getUrlParam("skip")
-  var limit = $(document).getUrlParam("limit")
-  var startkey = $(document).getUrlParam("startkey")
-  var endkey = $(document).getUrlParam("endkey")
 
   if (descending)
     ret.descending = descending
