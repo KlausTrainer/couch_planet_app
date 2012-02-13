@@ -8,12 +8,16 @@
     "to": "../.."
   },
   {
-    "from": "/subscriptions/subscriptions.json",
-    "to": "../../subscriptions.json"
-  },
-  {
     "from": "/couch_planet/_changes",
     "to": "../../_changes"
+  },
+  {
+    "from": "/feed_images/*",
+    "to": "../../*"
+  },
+  {
+    "from": "/subscriptions/subscriptions.json",
+    "to": "../../subscriptions.json"
   },
   {
     "from": "/couch_planet/_design/couch_planet",
