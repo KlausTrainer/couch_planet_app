@@ -138,6 +138,7 @@ h4 a:hover, h4 a:visited:hover {
 
 .entry {
   list-style: none;
+  word-wrap: break-word;
   margin-top: 10px;
   margin-bottom: 10px;
 }
