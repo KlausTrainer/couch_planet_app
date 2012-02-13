@@ -183,11 +183,7 @@ img.face {
   line-height: 18px;
 }
 
-.body > img {
-  text-align: center;
-}
-
-.body .center img,iframe {
+.body .main img,iframe {
   display: block;
   width: auto;
   margin: auto;

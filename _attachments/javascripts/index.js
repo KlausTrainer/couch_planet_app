@@ -22,9 +22,8 @@ $.couch.app(function(app) {
     }
     this.prev_date = date
 
-    var url = "_view/recent-posts?descending=true&limit=5&skip=1&startkey=" + startkey + "&endkey=" + endkey
     $.ajax({
-      url : url,
+      url : url = "_view/recent-posts?descending=true&limit=9&skip=1&startkey=" + startkey + "&endkey=" + endkey,
       dataType: 'json',
       success: function(data) {
         if (data && data.rows) {
@@ -42,15 +41,10 @@ $.couch.app(function(app) {
                         entry.providerUrl + '">' + entry.providerName +
                         '</a></h3><h4><a href="' + entry.link + '">' +
                         entry.title + '</a></h4>' + '<div class ="body">' +
-                        entry.body + enclosure + '<p class="by">by ' +
-                        entry.author + ', <span class="date">' +
-                        $.prettyDate(entry.date) + '</span></p></div></li>')
-            newEntry.find('div.body img,iframe').each(function() {
-              var $i = $(this)
-              if ($i.length && !$i.hasClass('type-icon')) {
-                $i.replaceWith($("<div class='center'></div>").append($i.clone()))
-              }
-            })
+                        '<span class="main">' + entry.body + '</span>' +
+                        enclosure + '<p class="by">by ' + entry.author +
+                        ', <span class="date">' + $.prettyDate(entry.date) +
+                        '</span></p></div></li>')
             $('#posts').append(newEntry)
           })
         }
@@ -61,9 +55,9 @@ $.couch.app(function(app) {
   }
 
   $(document).endlessScroll({
-    bottomPixels: 128,
+    bottomPixels: 512,
     fireOnce: true,
-    fireDelay: 256,
+    fireDelay: 512,
     callback: scrollFun,
     loader: '<img id="loader" src="images/loading.gif"/>',
     insertAfter: "#posts li.entry:last",
