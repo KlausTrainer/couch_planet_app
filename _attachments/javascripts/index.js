@@ -1,66 +1,58 @@
 $.couch.app(function(app) {
-  $("#posts").evently(app.ddoc.evently.posts, app)
+  $('#posts').evently(app.ddoc.evently.posts, app)
 
-  var ceaseFire = false
+  var template = $.couch.app.ddoc.evently.posts._changes.mustache,
+      loader = '<img id="loader" src="images/loading.gif"/>',
+      insertAfter = '#posts li.entry:last',
+      bottomPixels = 768, fireDelay = 256, fired = false, ceaseFire = false
 
-  var scrollFun = function() {
+  $(document).scroll(function() {
     if (ceaseFire)
-      return false
+      return // scroll will still get called, but nothing will happen
 
-    var $last_entry = $("#posts li.entry:last")
+    var is_scrollable = $(document).height() - $(window).height() <= $(window).scrollTop() + bottomPixels
 
-    if (!this.prev_date)
-      this.prev_date = $last_entry.data('date')
+    if (is_scrollable && fired != true) {
+      fired = true
+      $(insertAfter).after('<div id="endless_scroll_loader">' + loader + '</div>')
 
-    var date = $last_entry.data("date"),
-        startkey = '"' + date + '"',
-        endkey = '"0000-01-01T00%3A00%3A00.000Z"'
+      var $last_entry = $('#posts li.entry:last'),
+          date = $last_entry.data('date'), start
 
-    if (date === this.prev_date) {
-      var docid = $last_entry.attr("id")
-      startkey = startkey + '&startkey_docid=' + '"' + docid + '"'
-    }
-    this.prev_date = date
-
-    $.ajax({
-      url : url = "_view/recent-posts?descending=true&limit=9&skip=1&startkey=" + startkey + "&endkey=" + endkey,
-      dataType: 'json',
-      success: function(data) {
-        if (data && data.rows) {
-          ceaseFire = (data.offset == data.total_rows || data.rows.length < 4)
-          data.rows.forEach(function(entryObj) {
-            var entry = entryObj.value, enclosure = '', newEntry
-            if (entry.enclosure) {
-              enclosure = '<p class="enclosure"><img class="type-icon"' +
-                          ' src="images/audio.png"/> <a href="' +
-                          entry.enclosure_link + '">' + entry.enclosure +
-                          '</a></p>'
-            }
-            newEntry = $('<li id="' + entry.link + '" data-date="' +
-                        entry.date + '" class="entry"><h3><a href="' +
-                        entry.providerUrl + '">' + entry.providerName +
-                        '</a></h3><h4><a href="' + entry.link + '">' +
-                        entry.title + '</a></h4>' + '<div class ="body">' +
-                        '<span class="main">' + entry.body + '</span>' +
-                        enclosure + '<p class="by">by ' + entry.author +
-                        ', <span class="date">' + $.prettyDate(entry.date) +
-                        '</span></p></div></li>')
-            $('#posts').append(newEntry)
-          })
-        }
-        return false
+      if (!this.prev_date || date === this.prev_date) {
+        start = 'startkey="' + date + '"' + '&startkey_docid=' + '"' + $last_entry.attr('id') + '"'
+      } else {
+        start = 'skip=1&startkey="' + date + '"'
       }
-    })
-    return true
-  }
+      this.prev_date = date
 
-  $(document).endlessScroll({
-    bottomPixels: 512,
-    fireOnce: true,
-    fireDelay: 512,
-    callback: scrollFun,
-    loader: '<img id="loader" src="images/loading.gif"/>',
-    insertAfter: "#posts li.entry:last",
-    ceaseFire: function() { return ceaseFire }
+      $.ajax({
+        url : url = '_view/recent-posts?descending=true&limit=9&' + start + '&endkey="0000-01-01T00%3A00%3A00.000Z"',
+        dataType: 'json',
+        complete: function(xhr, status) {
+          if (status === 'success') {
+            var data = $.parseJSON(xhr.responseText)
+            if (data && data.rows) {
+              ceaseFire = (data.offset == data.total_rows || data.rows.length < 8)
+              $(insertAfter).after('<div id="endless_scroll_data">' + $.mustache(template, $.couch.app.ddoc.evently.posts._changes.data(data)) + '</div>')
+              $('div#endless_scroll_data').hide().fadeIn()
+              $('div#endless_scroll_data').removeAttr('id')
+              $('body').after('<div id="endless_scroll_marker"></div>')
+              // slight delay for preventing event firing twice
+              $('div#endless_scroll_marker').fadeTo(fireDelay, 1, function() {
+                $(this).remove()
+              })
+            }
+          }
+          fired = false
+          $('div#endless_scroll_loader').remove()
+        }
+      })
+    }
   })
-}, {db: "couch_planet", design: "couch_planet"})
+},
+{
+  db: 'couch_planet',
+  design: 'couch_planet',
+  ddoc: $.couch.app.ddoc
+})
