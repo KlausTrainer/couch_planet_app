@@ -16,6 +16,10 @@
     "to": "../../*"
   },
   {
+    "from": "/feed_enclosures/*",
+    "to": "../../*"
+  },
+  {
     "from": "/subscriptions/subscriptions.json",
     "to": "../../subscriptions.json"
   },
