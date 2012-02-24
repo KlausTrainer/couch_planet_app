@@ -20,8 +20,8 @@
     "to": "../../*"
   },
   {
-    "from": "/subscriptions/subscriptions.json",
-    "to": "../../subscriptions.json"
+    "from": "/subscriptions/*",
+    "to": "../../*"
   },
   {
     "from": "/couch_planet/_design/couch_planet",

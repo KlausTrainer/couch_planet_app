@@ -52,7 +52,7 @@ var subscriptions = {
       json = json + '\n  ]\n}'
       $.ajax({
         type : "PUT",
-        url : "../../subscriptions.json",
+        url : "subscriptions/subscriptions.json",
         data : json,
         dataType : 'json',
         beforeSend : function(xhr) {
