@@ -27,11 +27,11 @@ $.couch.app(function(app) {
           query = $.couch.app.ddoc.evently.posts._changes.query,
           $last_entry = $posts.find('li.entry:last')
 
-      if ($last_entry) {
+      if ($last_entry.length === 0) {
+        date = "3012-12-12T23%3A59%3A59.999Z"
+      } else {
         $last_entry.after('<div id="endless_scroll_loader">' + loader + '</div>')
         date = $last_entry.data('date')
-      } else {
-        date = "3012-12-12T23%3A59%3A59.999Z"
       }
 
       if (!prev_date || date === prev_date) {
